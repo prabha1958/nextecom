@@ -18,29 +18,40 @@ export default function sarees({saree}) {
   )
 }
 
-const query = groq`*[_type == "saree" && slug.current == $slug][0]`;
-  
-
 export const getStaticPaths = async () => {
-    const paths = await client.fetch(
-      groq`*[_type == "saree" && defined(slug.current)][]{
-        "params": { "slug": slug.current }
-      }`
-    );
-  
-    return { paths, fallback: true };
+  const query = `*[_type == "saree"] {
+    slug {
+      current
+    }
   }
+  `;
+
+  const sarees = await client.fetch(query);
+
+  const paths = sarees.map((product) => ({
+    params: { 
+      slug: product.slug.current
+    }
+  }));
+
+  return {
+    paths,
+    fallback: 'blocking'
+  }
+}
+
+export const getStaticProps = async ({ params: { slug }}) => {
+  const query = `*[_type == "saree" && slug.current == '${slug}'][0]`;
+  
+  
+  const saree = await client.fetch(query);
 
 
-  export const getStaticProps = async ({ params }) => {
-    const queryParams = { slug: params?.slug ?? `` };
-  
-    const saree = await client.fetch(query, queryParams);
-  
-    return {
-      props: {
-        saree,
-      },
-    };
-  };
+
+  return {
+    props: {
+      saree
+     }
+  }
+}
 

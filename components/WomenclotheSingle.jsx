@@ -110,7 +110,7 @@ export default function WomenclotheSingle({womenclothe }) {
        go()
       }
      },[])
-console.log(reviews)
+
   return (
     <div className="w-full mt-12 ">
         <div className="w-full text-center py-3">

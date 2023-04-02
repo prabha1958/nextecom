@@ -13,6 +13,8 @@ import Review from "./Review";
 import StarRating from "./StarRating";
 import { useAuthContext } from "@/hooks/useAuthContext";
 import OtherRelated from "./OtherRelated";
+import moment from 'moment'
+import Ratex from "./Ratex";
 
 export default function SareeSingle({saree }) {
   
@@ -25,6 +27,8 @@ export default function SareeSingle({saree }) {
     const {currentUser} = useAuthContext()
     const [userrate,setUserrate] = useState()
     const [rate,setRate] = useState()
+    const [reviews,setReviews] = useState([])
+    const [userreview,setUserreview] = useState([])
 
 
     useEffect(()=>{
@@ -74,12 +78,34 @@ export default function SareeSingle({saree }) {
               })
        },[saree.slug.current])
 
+       useEffect(()=>{
+         if(currentUser){
+          async function go(){
+             const q = query(collection(db,"reviews"),where("pid","==",saree.slug.current))
+             const res =  onSnapshot(q,(snapshot)=>{
+                 let result = []
+                  snapshot.docs.forEach((doc)=>{
+                      result.push(doc.data())
+                   
+                  })
+                  let urev = result.filter(item=>item.userid == currentUser.uid)
+                 
+                  setUserreview(urev)
+                  setReviews(result)
+                  
+                  
+             })
+          }
+          go()
+         }
+        },[])
+
       const handleClose =()=>{
         
          setOpen(false)
       }
    
-  
+
   return (
     <div className="w-full mt-12 ">
         <div className="w-full text-center py-3">
@@ -154,15 +180,16 @@ export default function SareeSingle({saree }) {
       </div>
       <div className=" max-w-7xl mx-auto  my-2 flex items-start px-2">
                 <div className="max-w-4xl py-2">
-                  {currentUser && (
-                       <div className="flex items-center justify-center gap-4 mb-5">
-                       <p className="text-xl font-bold text-themed4 ">Reviews</p>
-                        <div className="mt-2 text-left">
-                           <p onClick={()=>setOpen(true)} className="text-sm font-medium text-themed4 cursor-pointer">Rate and review this product</p>
-                        {open &&  <Review handleClose={handleClose} pid = {saree._id}/>}
-                        </div>   
-                    </div>
-                  )}
+                {currentUser && userreview.length == 0 ? (
+                        <>
+                          
+                            <div className="mt-2 text-left">
+                             <p onClick={()=>setOpen(true)} className="text-sm font-medium text-themed4 cursor-pointer">Rate and review this product</p>
+                            {open && <Review handleClose={handleClose} pid = {saree.slug.current} name={currentUser.displayName}/>}
+                             
+                            </div>  
+                           
+                        </>):""}
                    
                     
                     {currentUser && !userrate && <StarRating pid={saree.slug.current} />}
@@ -171,6 +198,21 @@ export default function SareeSingle({saree }) {
                     </div>
                     
                 </div>
+            </div>
+            <div className=" max-w-7xl mx-auto  my-2 flex items-start px-2">
+            <div className="max-w-4xl py-2">
+              <p className="text-xl font-bold text-themed4">REVIEWS</p>
+              {currentUser && reviews && reviews.map((item,index)=>(
+                          <div key={index} className="flex flex-col items-start my-2">
+                             <div className="flex items-start gap-2 justify-center">
+                                <Ratex pid={item.pid} userid={item.userid} />
+                                <p className="text-sm font-bold text-themed4">{item.name}</p>
+                                <p className="text-xs font-light text-gray-600">{moment(item.date).fromNow()}</p>
+                             </div>
+                             <p className="text-sm font-nunito text-themed4">{item.rev}</p>
+                          </div>
+                       ))}
+             </div>
             </div>
     </div>
   )

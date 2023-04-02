@@ -18,31 +18,40 @@ export default function womenclothe({womenclothe}) {
   )
 }
 
-const query = groq`*[_type == "womensclothe" && slug.current == $slug][0]`;
-  
-
 export const getStaticPaths = async () => {
-    const paths = await client.fetch(
-      groq`*[_type == "womensclothe" && defined(slug.current)][]{
-        "params": { "slug": slug.current }
-      }`
-    );
-  
-    return { paths, fallback: true };
+  const query = `*[_type == "womensclothe"] {
+    slug {
+      current
+    }
   }
+  `;
+
+  const womenclothes = await client.fetch(query);
+
+  const paths = womenclothes.map((product) => ({
+    params: { 
+      slug: product.slug.current
+    }
+  }));
+
+  return {
+    paths,
+    fallback: 'blocking'
+  }
+}
+
+export const getStaticProps = async ({ params: { slug }}) => {
+  const query = `*[_type == "womensclothe" && slug.current == '${slug}'][0]`;
+  
+  
+  const womenclothe = await client.fetch(query);
 
 
-  export const getStaticProps = async ({ params }) => {
-    const queryParams = { slug: params?.slug ?? `` };
-  
-    const womenclothe = await client.fetch(query, queryParams);
-    
-  
-    return {
-      props: {
-        womenclothe,
-      
-      },
-    };
-  };
+
+  return {
+    props: {
+      womenclothe
+     }
+  }
+}
 

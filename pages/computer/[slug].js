@@ -16,28 +16,39 @@ export default function computer({computer}) {
   )
 }
 
-const query = groq`*[_type == "computer" && slug.current == $slug][0]`;
-  
-
 export const getStaticPaths = async () => {
-    const paths = await client.fetch(
-      groq`*[_type == "computer" && defined(slug.current)][]{
-        "params": { "slug": slug.current }
-      }`
-    );
-  
-    return { paths, fallback: true };
+  const query = `*[_type == "computer"] {
+    slug {
+      current
+    }
   }
+  `;
+
+  const computers = await client.fetch(query);
+
+  const paths = computers.map((product) => ({
+    params: { 
+      slug: product.slug.current
+    }
+  }));
+
+  return {
+    paths,
+    fallback: 'blocking'
+  }
+}
+
+export const getStaticProps = async ({ params: { slug }}) => {
+  const query = `*[_type == "computer" && slug.current == '${slug}'][0]`;
+  
+  
+  const computer = await client.fetch(query);
 
 
-  export const getStaticProps = async ({ params }) => {
-    const queryParams = { slug: params?.slug ?? `` };
-  
-    const computer = await client.fetch(query, queryParams);
-  
-    return {
-      props: {
-        computer,
-      },
-    };
-  };
+
+  return {
+    props: {
+      computer
+     }
+  }
+}
