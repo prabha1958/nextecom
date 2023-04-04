@@ -237,22 +237,6 @@ export const AuthContextProvider =({children})=>{
    }
 
 
-   const getrate = async (productid)=>{
-  
-    if(state.currentUser){
-      const q = query(collection(db,"ratings"), where("userid","==",state.currentUser.uid), where("pid","==", productid))
-       const res =  onSnapshot(q,(snapshot)=>{
-          snapshot.docs.forEach((doc)=>{
-            setUserrate(doc.data().rate)
-            console.log(doc.data().rate)
-          })
-       })
-      
-        
-      
-    }
-   }
-
    const rate = async (pid,userid,rate)=>{
     console.log(userid)
       try{
@@ -269,6 +253,21 @@ export const AuthContextProvider =({children})=>{
         setIsLoading(false)
       }
    }
+
+
+   const getcart = (userid)=>{
+    const q = query(collection(db,"cart"),where("userid","==",userid))
+    const res =  onSnapshot(q,(snapshot)=>{
+        let result = []
+         snapshot.docs.forEach((doc)=>{
+             result.push(doc.data())
+            
+         })
+       
+        return { result}
+         
+    })
+   }
   
  
     return (
@@ -283,8 +282,8 @@ export const AuthContextProvider =({children})=>{
           signupWithGoogle,
           updatereview,
           rate,
-          getrate,
           userrate,
+          getcart
          
         
         }}  >

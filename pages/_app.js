@@ -1,5 +1,6 @@
 import Footer from '@/components/Footer'
 import Head from '@/components/Head'
+import MobileFooter from '@/components/MobileFooter'
 import Navbar from '@/components/Navbar'
 import { AuthContextProvider } from '@/context/AuthContext'
 import '@/styles/globals.css'
@@ -16,6 +17,7 @@ export default function App({ Component, pageProps }) {
     <Navbar/>
     <Component {...pageProps} />
     <Footer />
+    <MobileFooter />
     </AuthContextProvider>
   </>
   )

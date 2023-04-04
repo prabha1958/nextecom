@@ -18,7 +18,7 @@ export default function SearchSummary({searchstr}) {
      console.log(data)
   return (
     <div className="w-full "> 
-      <div className="max-w-7xl mx-auto  ">
+      <div className="max-w-7xl mx-auto mb-28  ">
         
          <div className=' mt-4 flex flex-col items-start justify-center '>
          <div className="w-full flex items-center justify-center mt-16 px-7 py-6 bg-gray-200">

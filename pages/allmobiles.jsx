@@ -7,7 +7,7 @@ import React from 'react'
 export default function allmobiles({mobile}) {
   
   return (
-    <div className="max-w-7xl mx-auto ">
+    <div className="max-w-7xl mx-auto mb-28 ">
          <div className="w-full flex items-center justify-center mt-16 px-7 py-1 bg-gray-200">
             <p className="text-sm font-bold text-themed4">All Mibiles</p>
          </div>

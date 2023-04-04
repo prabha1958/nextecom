@@ -21,7 +21,7 @@ export default function Home({products,mobiles, menclothes, womenclothes, sarees
    <div className="w-full py-4"> 
 
    <Head />
-    <div className="max-w-7xl mx-auto ">
+    <div className="max-w-7xl mx-auto mb-28 ">
     <div className="w-full flex items-center justify-between my-5 px-7 py-1 bg-gray-200">
         <p className="text-sm font-bold text-themed4">Computers</p>
         <Link href="/allcomputers"><p className="text-sm font-bold text-themed4">See all computers</p></Link>

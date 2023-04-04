@@ -2,7 +2,7 @@
 
 export default function Footer() {
   return (
-    <div className="px-4 py-5 bg-themed4 mx-auto">
+    <div className="px-4 py-5 bg-themed4 mx-auto hidden md:block">
         <div className="w-full flex items-center justify-center my-8">
              <img src={"http://localhost:3000/logo.png"} className="w-1/18 h-9" />
           </div>

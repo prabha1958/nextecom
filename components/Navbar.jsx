@@ -1,42 +1,67 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Search from "./Search"
 import { SanityDocument } from "@sanity/client";
 import { groq } from "next-sanity";
 import { client } from "@/lib/client"
 import Link from "next/link";
 import { useAuthContext } from "@/hooks/useAuthContext";
+import { collection,query,where, onSnapshot,doc, setDoc,getDocs,deleteDoc  } from "firebase/firestore";
+import {  db } from "../firebase/config";
+import Cart from "./Cart";
 
 
 export default function Navbar() {
     const [menuOpen,setMenuOpen] = useState()
     const {currentUser, logout} = useAuthContext()
-    
+    const [cartitems,setCartitems] = useState([])
+    const [cartOpen,setCartOpen] = useState(false)
+ 
     const handleClick =(e)=>{
         e.preventDefault()
         logout()
     }
+  
+    useEffect(()=>{
+      if(currentUser){  
+       async function go(){
+          const q = query(collection(db,"cart"),where("userid","==",currentUser.uid))
+          const res =  onSnapshot(q,(snapshot)=>{
+              let result = []
+               snapshot.docs.forEach((doc)=>{
+                   result.push({...doc.data(), id:doc.id})
+                  
+               })
+             
+               setCartitems(result)
+               
+          })
+       }
+       go()
+      }
+     },[currentUser])
+
+     const cartClose = ()=>{
+      setCartOpen(false)
+     }
+
+     const deleteItem = async (id)=>{
+       
+         await deleteDoc(doc(db,"cart", id))
+     }
+
+   
+
+
   return (
     <>
-    <div className="fixed w-full top-0 py-4 md:py-2 bg-themed3 z-50">
+    <div className="fixed w-full top-0 py-6 md:py-2 bg-themed3 z-50">
+       
         <div className="max-w-7xl mx-auto px-5 py-2 flex items-center justify-between relative ">
-        {!menuOpen && (
-           <div onClick={()=> setMenuOpen(!menuOpen)} class="space-y-1 md:hidden cursor-pointer z-20">
-           <div className="w-6 h-0.5 bg-white"></div>
-           <div className="w-6 h-0.5 bg-white"></div>
-           <div className="w-6 h-0.5 bg-white"></div>
-         </div>
-        )}
-
-        {menuOpen && (
-           <div onClick={()=> setMenuOpen(!menuOpen)} class=" md:hidden cursor-pointer z-20">
-           <div className=" text-xs font-bold text-white">close</div>
-         
-           
-         </div>
-        )}
+      
          
          <Link href="/"><img src={"http://localhost:3000/logo.png"} className="w-1/18 h-9 hidden md:block cursor-pointer  " /></Link>
          <Search />
+        
           <div className="hidden md:block">
             <div className=" flex items-center justify-around gap-2 ">
               {!currentUser && 
@@ -49,8 +74,14 @@ export default function Navbar() {
               }
               {currentUser && (
                 <>
+                   <div onClick={()=>setCartOpen(true)} className="relative block cursor-pointer">
+                     <img src={"http://localhost:3000/cart1.png"} className=" w-8 h-6 mx-2" />
+                     {cartitems.length>0 && <p className="absolute p-0.5 rounded-full bg-red-600 text-xs font-bold text-themel4 left-4 -top-2">{cartitems.length}</p>}
+                   </div>
+                    
                   <p className="text-md font-thin text-themel4 cursor-pointer">{currentUser.displayName}</p>
                   <button onClick={handleClick} className="text-md px-2 py-1 bg-themed4 font-thin text-themel4 cursor-pointer">Logout</button>
+                 
 
                 </>
               )}
@@ -71,7 +102,7 @@ export default function Navbar() {
        
       
     </div>
-  
+      {cartOpen && <Cart cartitems={cartitems} cartClose={cartClose} deleteItem={deleteItem}/>}
     </>
   )
 }

@@ -19,7 +19,7 @@ export default function allmenclothes({ menclothes}) {
   return (
    <div className="w-full py-4"> 
   
-    <div className="max-w-7xl mx-auto ">
+    <div className="max-w-7xl mx-auto mb-28 ">
     <div className="w-full flex items-center justify-center mt-16 mb-3 px-7 py-1 bg-gray-200">
             <p className="text-sm font-bold text-themed4">All Mens Clothes</p>
          </div>

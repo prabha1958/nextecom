@@ -42,7 +42,7 @@ export default function ProductShow({mobile, type }) {
    
   
   return (
-    <div className="w-full mt-20 ">
+    <div className="w-full mt-20 mb-28">
         <div className="w-full text-center py-3">
            <h1 className="text-xl font-bold text-themed4">{mobile[0].name}</h1>
         </div>

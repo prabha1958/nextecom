@@ -9,12 +9,13 @@ import Link from "next/link";
 import { useAuthContext } from "@/hooks/useAuthContext";
 import Review from "./Review";
 import StarRating from "./StarRating";
-import {  collection,query,where, onSnapshot  } from "firebase/firestore";
+import { collection,query,where, onSnapshot,doc, setDoc,getDocs  } from "firebase/firestore";
 import {  db } from "../firebase/config";
 import Rate from "./Rate";
 import OtherRelated from "./OtherRelated";
 import moment from 'moment'
 import Ratex from "./Ratex";
+import { v4 as uuid } from "uuid";
 
 export default function WomenclotheSingle({womenclothe }) {
   
@@ -27,7 +28,7 @@ export default function WomenclotheSingle({womenclothe }) {
     const [code,setCode] = useState(womenclothe.category)
     const discount = (womenclothe.mrp - womenclothe.saleprice)/womenclothe.mrp*100
     const [rate,setRate] = useState()
-    const [reviews,setReviews] = useState()
+    const [reviews,setReviews] = useState([])
     const [userreview,setUserreview] = useState([])
 
    
@@ -111,8 +112,30 @@ export default function WomenclotheSingle({womenclothe }) {
       }
      },[])
 
+
+     const addToCart = async (pid,userid,slug,pname,price)=>{
+        
+      const q = query(collection(db,"cart"), where("pid","==",pid))
+      const result = await getDocs(q)
+        let exprod = []
+       result.forEach((doc)=>{
+          exprod.push(doc.data())
+       })
+       if(exprod.length <1){
+         setDoc(doc(db,"cart",uuid()),{
+            pid,
+            userid,
+            slug,
+            pname,
+            price
+            
+         })
+      }
+      
+  }
+
   return (
-    <div className="w-full mt-12 ">
+    <div className="w-full mt-12 mb-28 ">
         <div className="w-full text-center py-3">
            <h1 className="text-xl font-bold text-themed4">{womenclothe.name}</h1>
         </div>
@@ -157,7 +180,7 @@ export default function WomenclotheSingle({womenclothe }) {
             </div>
             <div className=" flex items-start mt-8 justify-sgart gap-2">
                 <button className="text-md rounded-lg font-thin bg-themered text-themel4 px-4 py-2">By Now</button>
-                <button className="text-md rounded-lg font-thin bg-themeblue text-themel4 px-4 py-2 ">Add to cart</button>
+                <button onClick={()=>addToCart(womenclothe._id,currentUser.uid,womenclothe.slug.current,womenclothe.name,womenclothe.saleprice)}  className="text-md rounded-lg font-thin bg-themeblue text-themel4 px-4 py-2 ">Add to cart</button>
             </div>
             <div className="flex flex-col mt-8 items-start space-y-2">
                 <p><span className="text-sm font-light text-gray-800">Color:</span>&nbsp;<span className="text-sm text-bold text-gray-600">{womenclothe.color}</span></p>
@@ -203,14 +226,10 @@ export default function WomenclotheSingle({womenclothe }) {
                              <p onClick={()=>setOpen(true)} className="text-sm font-medium text-themed4 cursor-pointer">Rate and review this product</p>
                             {open && <Review handleClose={handleClose} pid = {womenclothe.slug.current} name={currentUser.displayName}/>}
                              
-                           
                             </div>  
                            
-                        </>
-                          )
-                          :
-                          ""
-                           } 
+                        </>):""}
+                        
  
                         
                        </div>

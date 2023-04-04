@@ -6,7 +6,7 @@ import { client } from "@/lib/client";
 import { useState, useEffect } from "react";
 import { groq } from "next-sanity";
 import Link from "next/link";
-import {  collection,query,where, onSnapshot  } from "firebase/firestore";
+import { collection,query,where, onSnapshot,doc, setDoc,getDocs  } from "firebase/firestore";
 import {  db } from "../firebase/config";
 import Rate from "./Rate";
 import Review from "./Review";
@@ -15,6 +15,7 @@ import { useAuthContext } from "@/hooks/useAuthContext";
 import OtherRelated from "./OtherRelated";
 import Ratex from "./Ratex";
 import moment from 'moment'
+import { v4 as uuid } from "uuid";
 
 export default function MobileSingle({mobile }) {
   
@@ -104,10 +105,32 @@ export default function MobileSingle({mobile }) {
      },[])
 
 
+     const addToCart = async (pid,userid,slug,pname,price)=>{
+        
+      const q = query(collection(db,"cart"), where("pid","==",pid))
+      const result = await getDocs(q)
+        let exprod = []
+       result.forEach((doc)=>{
+          exprod.push(doc.data())
+       })
+       if(exprod.length <1){
+         setDoc(doc(db,"cart",uuid()),{
+            pid,
+            userid,
+            slug,
+            pname,
+            price
+            
+         })
+      }
+      
+  }
+
+
    
   
   return (
-    <div className="w-full mt-12 ">
+    <div className="w-full mt-12 mb-28 ">
         <div className="w-full text-center py-3">
            <h1 className="text-xl font-bold text-themed4">{mobile.name}</h1>
         </div>
@@ -151,7 +174,7 @@ export default function MobileSingle({mobile }) {
             </div>
             <div className=" flex items-start mt-8 justify-sgart gap-2">
                 <button className="text-md rounded-lg font-thin bg-themered text-themel4 px-4 py-2">By Now</button>
-                <button className="text-md rounded-lg font-thin bg-themeblue text-themel4 px-4 py-2 ">Add to cart</button>
+                <button onClick={()=>addToCart(mobile._id,currentUser.uid,mobile.slug.current,mobile.name,mobile.saleprice)} className="text-md rounded-lg font-thin bg-themeblue text-themel4 px-4 py-2 ">Add to cart</button>
             </div>
             <div className="flex items-start mt-8 justify-sgart">
                 <p className="text-xl font-bold text-themed4">About the product</p>

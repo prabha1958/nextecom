@@ -47,7 +47,7 @@ export default function Search() {
 
   return (
    
-      <div className="w-80 ml-6 md:ml-44 lg:ml-96 flex items-center justify-center absolute top-2  ">
+      <div className="w-80 ml-6 md:ml-44 lg:ml-96 flex items-center justify-center absolute top-0 md:top-2 ">
         <div className=" w-80 md:w-96 ">
           <div className="w-full flex items-center justify-center">
              <input  onKeyDown={()=>handleKey()} onChange={(e)=>setSearchValue(e.target.value)} placeholder="search here for anything"  className=" w-3/4 md:w-full px-3 rounded-l-lg py-2  bg-themel4 text-xs font-bold text-themed4 text-center" />
