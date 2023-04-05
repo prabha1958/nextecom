@@ -172,10 +172,13 @@ export default function MobileSingle({mobile }) {
                 <p className="text-2xl font-bold text-gray-900 ">&#8377; {mobile.saleprice} <span className="text-xs font-thin text-gray-600 line-through">mrp :&#8377; {mobile.mrp}</span></p>
                 <p className="text-xs font-bold text-gray-400">&#40; &#8377;{mobile.mrp - mobile.saleprice} off &#41;</p>
             </div>
-            <div className=" flex items-start mt-8 justify-sgart gap-2">
-                <button className="text-md rounded-lg font-thin bg-themered text-themel4 px-4 py-2">By Now</button>
-                <button onClick={()=>addToCart(mobile._id,currentUser.uid,mobile.slug.current,mobile.name,mobile.saleprice)} className="text-md rounded-lg font-thin bg-themeblue text-themel4 px-4 py-2 ">Add to cart</button>
-            </div>
+            {currentUser && (
+                  <div className=" flex items-start mt-8 justify-sgart gap-2">
+                  <button className="text-md rounded-lg font-thin bg-themered text-themel4 px-4 py-2">By Now</button>
+                  <button onClick={()=>addToCart(mobile._id,currentUser.uid,mobile.slug.current,mobile.name,mobile.saleprice)} className="text-md rounded-lg font-thin bg-themeblue text-themel4 px-4 py-2 ">Add to cart</button>
+              </div>
+            )}
+            
             <div className="flex items-start mt-8 justify-sgart">
                 <p className="text-xl font-bold text-themed4">About the product</p>
 

@@ -8,11 +8,12 @@ import { useAuthContext } from "@/hooks/useAuthContext";
 import { collection,query,where, onSnapshot,doc, setDoc,getDocs,deleteDoc  } from "firebase/firestore";
 import {  db } from "../firebase/config";
 import Cart from "./Cart";
+import Message from "./Message";
 
 
 export default function Navbar() {
     const [menuOpen,setMenuOpen] = useState()
-    const {currentUser, logout} = useAuthContext()
+    const {currentUser, logout, notification} = useAuthContext()
     const [cartitems,setCartitems] = useState([])
     const [cartOpen,setCartOpen] = useState(false)
  
@@ -103,6 +104,7 @@ export default function Navbar() {
       
     </div>
       {cartOpen && <Cart cartitems={cartitems} cartClose={cartClose} deleteItem={deleteItem}/>}
+      {notification && <Message notification={notification} />}
     </>
   )
 }

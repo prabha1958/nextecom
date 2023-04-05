@@ -105,7 +105,9 @@ export default function ComputerSingle({computer }) {
         },[])
 
         const addToCart = async (pid,userid,slug,pname,price)=>{
-        
+             if(!currentUser){
+
+             }
             const q = query(collection(db,"cart"), where("pid","==",pid))
             const result = await getDocs(q)
               let exprod = []
@@ -170,10 +172,13 @@ export default function ComputerSingle({computer }) {
                 <p className="text-2xl font-bold text-gray-900 ">&#8377; {computer.saleprice} <span className="text-xs font-thin text-gray-600 line-through">mrp :&#8377; {computer.mrp}</span></p>
                 <p className="text-xs font-bold text-gray-400">&#40; &#8377;{computer.mrp - computer.saleprice} off &#41;</p>
             </div>
-            <div className=" flex items-start mt-8 justify-sgart gap-2">
-                <button className="text-md rounded-lg font-thin bg-themered text-themel4 px-4 py-2">By Now</button>
-                <button onClick={()=>addToCart(computer._id,currentUser.uid,computer.slug.current,computer.name,computer.saleprice)} className="text-md rounded-lg font-thin bg-themeblue text-themel4 px-4 py-2 ">Add to cart</button>
-            </div>
+            {currentUser && (
+                  <div className=" flex items-start mt-8 justify-sgart gap-2">
+                  <button className="text-md rounded-lg font-thin bg-themered text-themel4 px-4 py-2">By Now</button>
+                  <button onClick={()=>addToCart(computer._id,currentUser.uid,computer.slug.current,computer.name,computer.saleprice)} className="text-md rounded-lg font-thin bg-themeblue text-themel4 px-4 py-2 ">Add to cart</button>
+              </div>
+            )}
+           
             <div className="flex items-start mt-8 justify-sgart">
                 <p className="text-xl font-bold text-themed4">About the product</p>
 

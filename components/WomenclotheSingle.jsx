@@ -178,10 +178,13 @@ export default function WomenclotheSingle({womenclothe }) {
                 <p className="text-2xl font-bold text-gray-900 ">&#8377; {womenclothe.saleprice} <span className="text-xs font-thin text-gray-600 line-through">mrp :&#8377; {womenclothe.mrp}</span></p>
                 <p className="text-xs font-bold text-gray-400">&#40; &#8377;{womenclothe.mrp - womenclothe.saleprice} off &#41;</p>
             </div>
-            <div className=" flex items-start mt-8 justify-sgart gap-2">
-                <button className="text-md rounded-lg font-thin bg-themered text-themel4 px-4 py-2">By Now</button>
-                <button onClick={()=>addToCart(womenclothe._id,currentUser.uid,womenclothe.slug.current,womenclothe.name,womenclothe.saleprice)}  className="text-md rounded-lg font-thin bg-themeblue text-themel4 px-4 py-2 ">Add to cart</button>
-            </div>
+            {currentUser && (
+                  <div className=" flex items-start mt-8 justify-sgart gap-2">
+                  <button className="text-md rounded-lg font-thin bg-themered text-themel4 px-4 py-2">By Now</button>
+                  <button onClick={()=>addToCart(womenclothe._id,currentUser.uid,womenclothe.slug.current,womenclothe.name,womenclothe.saleprice)}  className="text-md rounded-lg font-thin bg-themeblue text-themel4 px-4 py-2 ">Add to cart</button>
+              </div>
+            )}
+           
             <div className="flex flex-col mt-8 items-start space-y-2">
                 <p><span className="text-sm font-light text-gray-800">Color:</span>&nbsp;<span className="text-sm text-bold text-gray-600">{womenclothe.color}</span></p>
                 <p><span className="text-sm font-light text-gray-800">Size:</span>&nbsp;<span className="text-sm text-bold text-gray-600">{womenclothe.size}</span></p>

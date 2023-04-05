@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import CartItem from "./CartItem";
+import Checkout from "./Checkout";
 
 
 export default function Cart({cartitems,cartClose, deleteItem}) {
   const [total,setTotal] = useState(0)
+  const [checkoutOpen,setCheckoutOpen]= useState(false)
    
        useEffect(()=>{
           function go(){
@@ -20,9 +22,20 @@ export default function Cart({cartitems,cartClose, deleteItem}) {
           }
           go()
        },[cartitems])
+
+
+       const handleClick=()=>{
+             setCheckoutOpen(true)
+       }
+
+       const handleClose = ()=>{
+         setCheckoutOpen(false)
+       }
+
+       console.log(handleClose)
   
   return (
-    <div className="fixed top-0 bottom-0 left-0 right-0 opacity-95 flex flex-col items-end justify-center bg-themel1 py-5 px-3 ">
+    <div className="fixed top-0 bottom-0 left-0 right-0 opacity-95 flex flex-col items-end justify-center bg-themel1 py-5 px-3 overflow-y-scroll ">
         
          <div className="flex1 w-1/3 bg-slate-300 opacity-100  min-h-screen px-10">
              <div className=" mt-20">
@@ -45,11 +58,14 @@ export default function Cart({cartitems,cartClose, deleteItem}) {
                     </div>
                   )}
                
-                    
+                    <div className="w-full text-center mt-5">
+                        <button onClick={handleClick} className="px-3 py-2 bg-green-700 text-white text-xl font-bold rounded-lg cursor-pointer">CHECKOUT</button>
+                    </div>
 
              </div>
             
          </div>
+         {checkoutOpen && <Checkout handleClose={handleClose} cartitems={cartitems} deleteItem={deleteItem} total={total}/>}
     </div>
   )
 }

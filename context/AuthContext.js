@@ -48,6 +48,14 @@ export const AuthContextProvider =({children})=>{
       currentUser:null,
       isAuthReady:false
     })
+    const [notification,_setNotification]= useState('')
+
+    const setNotification = (message)=>{
+      _setNotification(message)
+      setTimeout(()=>{
+        _setNotification('')
+      },5000)
+    }
 
 
     useEffect(() => {
@@ -91,7 +99,7 @@ export const AuthContextProvider =({children})=>{
 
              setDoc(doc(db,"users",res.user.uid),{
                displayName:inputs.name,
-               email:inputs.name,
+               email:inputs.email,
                mobile:inputs.mobile,
                premises:inputs.premises,
                street:inputs.street,
@@ -238,7 +246,7 @@ export const AuthContextProvider =({children})=>{
 
 
    const rate = async (pid,userid,rate)=>{
-    console.log(userid)
+    
       try{
         setIsLoading(true)
           await setDoc(doc(db,"ratings",uuid()),{
@@ -268,7 +276,32 @@ export const AuthContextProvider =({children})=>{
          
     })
    }
-  
+          const address = async (inputs,userid)=>{
+             try{
+              setIsLoading(true)
+
+              await setDoc(doc(db,"addresses",uuid()),{
+                userid,
+                premises:inputs.premises,
+                street:inputs.street,
+                area:inputs.area,
+                landmark:inputs.landmark,
+                city:inputs.city,
+                state:inputs.state,
+                pin:inputs.pin,
+              })
+
+              .then(()=>{
+                 setSuccess(true)
+              })
+
+              setIsLoading(false)
+             }catch(error){
+              setIsLoading(true)
+              setLoginError(error.message)
+              setIsLoading(false)
+             }
+          }
  
     return (
         <AuthContext.Provider value={{
@@ -283,7 +316,10 @@ export const AuthContextProvider =({children})=>{
           updatereview,
           rate,
           userrate,
-          getcart
+          getcart,
+          address,
+          notification,
+          setNotification
          
         
         }}  >

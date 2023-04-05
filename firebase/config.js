@@ -6,9 +6,9 @@ import {getFirestore} from "firebase/firestore"
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey:"AIzaSyA-_y4uAnE50r5bbnvuMk51RMRCtuXXEZE",
-  authDomain: "ecomnext-fcb05.firebaseapp.com",
-  projectId: "ecomnext-fcb05",
+  apiKey:process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
   storageBucket: "ecomnext-fcb05.appspot.com",
   messagingSenderId: "42861101678",
   appId:"1:42861101678:web:8e81ec0bf67797a136dc7f"

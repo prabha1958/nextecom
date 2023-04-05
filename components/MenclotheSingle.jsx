@@ -15,6 +15,7 @@ import Ratex from "./Ratex";
 import moment from 'moment'
 import { collection,query,where, onSnapshot,doc, setDoc,getDocs  } from "firebase/firestore";
 import { v4 as uuid } from "uuid";
+import { useRouter } from "next/router";
 
 export default function MenclotheSingle({menclothe }) {
   
@@ -24,11 +25,12 @@ export default function MenclotheSingle({menclothe }) {
     const discount = (menclothe.mrp - menclothe.saleprice)/menclothe.mrp*100
     const [code,setCode] = useState(menclothe.category)
     const [open,setOpen] = useState(false)
-    const {currentUser,getrate} = useAuthContext()
+    const {currentUser,setNotification} = useAuthContext()
     const [userrate,setUserrate] = useState(null)
     const [rate,setRate] = useState()
     const [userreview,setUserreview] = useState([])
     const [reviews,setReviews] = useState([])
+    const router = useRouter()
    
    
     useEffect(()=>{
@@ -106,7 +108,10 @@ export default function MenclotheSingle({menclothe }) {
         },[])
 
         const addToCart = async (pid,userid,slug,pname,price)=>{
-        
+           if(!currentUser){
+               setNotification("You must login to add items to cart")
+               router.push({pathname:"/login"})
+           }
          const q = query(collection(db,"cart"), where("pid","==",pid))
          const result = await getDocs(q)
            let exprod = []
@@ -171,10 +176,13 @@ export default function MenclotheSingle({menclothe }) {
                 <p className="text-2xl font-bold text-gray-900 ">&#8377; {menclothe.saleprice} <span className="text-xs font-thin text-gray-600 line-through">mrp :&#8377; {menclothe.mrp}</span></p>
                 <p className="text-xs font-bold text-gray-400">&#40; &#8377;{menclothe.mrp - menclothe.saleprice} off &#41;</p>
             </div>
-            <div className=" flex items-start mt-8 justify-sgart gap-2">
+            {currentUser && (
+                <div className=" flex items-start mt-8 justify-sgart gap-2">
                 <button className="text-md rounded-lg font-thin bg-themered text-themel4 px-4 py-2">By Now</button>
                 <button onClick={()=>addToCart(menclothe._id,currentUser.uid,menclothe.slug.current,menclothe.name,menclothe.saleprice)} className="text-md rounded-lg font-thin bg-themeblue text-themel4 px-4 py-2 ">Add to cart</button>
             </div>
+            )}
+            
             <div className="flex items-start mt-8 justify-sgart">
                 <p className="text-xl font-bold text-themed4">About the product</p>
 
