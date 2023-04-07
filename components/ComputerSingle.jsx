@@ -105,9 +105,7 @@ export default function ComputerSingle({computer }) {
         },[])
 
         const addToCart = async (pid,userid,slug,pname,price)=>{
-             if(!currentUser){
-
-             }
+           
             const q = query(collection(db,"cart"), where("pid","==",pid))
             const result = await getDocs(q)
               let exprod = []

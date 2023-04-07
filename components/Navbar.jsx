@@ -9,6 +9,8 @@ import { collection,query,where, onSnapshot,doc, setDoc,getDocs,deleteDoc  } fro
 import {  db } from "../firebase/config";
 import Cart from "./Cart";
 import Message from "./Message";
+import { PhotoUrl } from "@/Photourl";
+
 
 
 export default function Navbar() {
@@ -16,6 +18,9 @@ export default function Navbar() {
     const {currentUser, logout, notification} = useAuthContext()
     const [cartitems,setCartitems] = useState([])
     const [cartOpen,setCartOpen] = useState(false)
+    const {photourl} = PhotoUrl()
+
+
  
     const handleClick =(e)=>{
         e.preventDefault()
@@ -60,7 +65,7 @@ export default function Navbar() {
         <div className="max-w-7xl mx-auto px-5 py-2 flex items-center justify-between relative ">
       
          
-         <Link href="/"><img src={"http://localhost:3000/logo.png"} className="w-1/18 h-9 hidden md:block cursor-pointer  " /></Link>
+         <Link href="/"><img src={`${photourl}/logo.png`} className="w-1/18 h-9 hidden md:block cursor-pointer  " /></Link>
          <Search />
         
           <div className="hidden md:block">
@@ -76,7 +81,7 @@ export default function Navbar() {
               {currentUser && (
                 <>
                    <div onClick={()=>setCartOpen(true)} className="relative block cursor-pointer">
-                     <img src={"http://localhost:3000/cart1.png"} className=" w-8 h-6 mx-2" />
+                     <img src={`${photourl}/cart.png`} className=" w-8 h-6 mx-2" />
                      {cartitems.length>0 && <p className="absolute p-0.5 rounded-full bg-red-600 text-xs font-bold text-themel4 left-4 -top-2">{cartitems.length}</p>}
                    </div>
                     
@@ -94,7 +99,7 @@ export default function Navbar() {
 
          {menuOpen && (
              <div id="menu" className=" flex flex-col items-center justify-center space-y-4 bg-themed3 min-h-max absolute left-0 top-0 w-full p-10  rounded-b-3xl  text-themel4  text-center ">
-                <Link href="/"><img src={"http://localhost:3000/logo.png"} className="w-1/18 h-9" /></Link>
+                <Link href="/"><img src={`${photourl}/logo.png`} className="w-1/18 h-9" /></Link>
                  <Link href="/login"><p className="text-md font-thin text-themel4 cursor-pointer">Login</p></Link>
                 <Link href="/register"><p className="text-md font-thin text-themel4 cursor-pointer">Register</p></Link>
              </div>

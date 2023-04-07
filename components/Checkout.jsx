@@ -7,41 +7,83 @@ import {  db } from "../firebase/config";
 import Address from "./Address";
 import MoreAddress from "./MoreAddress";
 import CartItem from "./CartItem";
-import { PhotoUrl } from "@/photourl/PhotoUrl";
+import axios from "axios";
+import OrderPay from "./OrderPay";
 
 
-export default function Checkout({handleClose, cartitems, deleteItem, total}) {
-    const {currentUser} = useAuthContext()
+export default function Checkout({handleClose, cartitems, deleteItem, total, cartClose}) {
+    const {currentUser, setNotification} = useAuthContext()
     const [address,setAddress] = useState([])
-    const [selAddress,setSelAddress] = useState()
+    const [defaultAddress,setDefaultAddress] = useState()
+    const [selAddress,setSelAddress] = useState(defaultAddress)
     const [open,setOpen] = useState(false)
     const {photourl} = PhotoUrl()
+    const [response,setResponse] = useState()
+    const [modalOpen,setModalOpen] = useState(false)
+  
 
-    console.log(selAddress)
+   
 
     useEffect(()=>{
         async function go(){
             const q = query(collection(db,"addresses"),where("userid","==",currentUser.uid))
              const res =  onSnapshot(q,(snapshot)=>{
                  let result = []
+                 
                   snapshot.docs.forEach((doc)=>{
                       result.push(doc.data())
                     
                   })
-                
+                  const defadd = result.filter(item=>item.default == true)
+                 
                   setAddress(result)
+                  setSelAddress(defadd)
                   
              })
         }
         go()
     },[currentUser])
+
+    const inputs = [
+        userid=>currentUser.uid,
+        uername=>currentUser.displayName,
+        email=>currentUser.email,
+        mobile=>currentUser.mobile,
+        amount=>total
+]
+
    
+
+     const orderCreate = async (inputs)=>{
+        if(inputs.selAddress == ''){
+             setNotification("select your shipping address")
+             return
+        }
+        const result =  await axios.post("/api/payorder",{
+            userid:currentUser.uid,
+            username:currentUser.displayName,
+            email:currentUser.email,
+            mobile:currentUser.mobile,
+            amount:total,
+            cartitems,
+            address:selAddress,
+        })
+
+          if(result){
+            setResponse(result.data.res)
+            setModalOpen(true)
+          }
+     }
+
+    console.log(defaultAddress)
   return (
     <>
     <div className="fixed top-0 left-0 right-0 bottom-0 opacity-95  bg-themed3   px-3 overflow-y-scroll " >
       <div className="max-w-7xl min-h-screen mx-auto flex flex-col items-center justify-center bg-slate-300 opacity-100 border border-blue-400 mt-10  ">  
           <div className="w-full text-right my-6 px-4 ">
                    <p onClick={()=>handleClose()} className="cursor-pointer">Close</p> 
+                   
+
           </div>  
           <div className="w-full text-center my-4 px-4 ">
                    <p className="text-2xl font-bold text-themed4">CHECKOUT </p> 
@@ -59,14 +101,14 @@ export default function Checkout({handleClose, cartitems, deleteItem, total}) {
                    </div>
                    <div>
                       <p>Shipping address selected</p>
-                      {selAddress && (
+                      {defaultAddress && (
                         <>
-                           <p className="text-xs font-bold text-gray-700">{selAddress.premises}</p>
-                           <p className="text-xs font-bold text-gray-700">{selAddress.street}</p>
-                           <p className="text-xs font-bold text-gray-700">{selAddress.area}</p>
-                           <p className="text-xs font-bold text-gray-700">{selAddress.city}</p>
-                           <p className="text-xs font-bold text-gray-700">{selAddress.state}</p>
-                           <p className="text-xs font-bold text-gray-700">{selAddress.pin}</p>
+                           <p className="text-xs font-bold text-gray-700">{defaultAddress.premises}</p>
+                           <p className="text-xs font-bold text-gray-700">{defaultAddress.street}</p>
+                           <p className="text-xs font-bold text-gray-700">{defaultAddress.area}</p>
+                           <p className="text-xs font-bold text-gray-700">{defaultAddress.city}</p>
+                           <p className="text-xs font-bold text-gray-700">{defaultAddress.state}</p>
+                           <p className="text-xs font-bold text-gray-700">{defaultAddress.pin}</p>
                         </>
                       ) }
                    </div>
@@ -90,7 +132,7 @@ export default function Checkout({handleClose, cartitems, deleteItem, total}) {
                  {total>0 && <div className="w-full text-center mt-4 "> <span className="text-sm font-normal text-gray-700">Total amount</span>&nbsp;&nbsp;<span className="text-xl font-extrabold text-themed4">{total}</span></div>} 
 
                   <p>Pay with</p>
-                  <img src={`${photourl}/razorpay.png`}  className=" w-1/3 rounded-lg"/>
+                  <img onClick={orderCreate}  src={`${photourl}/razorpay.png`}  className=" w-1/3 rounded-lg cursor-pointer"/>
                </div>
               
            </div>    
@@ -98,6 +140,7 @@ export default function Checkout({handleClose, cartitems, deleteItem, total}) {
         </div>
     </div>
        {open && <MoreAddress  setOpen={setOpen}/>}
+       {modalOpen && <OrderPay data={response} setModalOpen={setModalOpen} cartClose={cartClose}/>}
     </>
   )
 }

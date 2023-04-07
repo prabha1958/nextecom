@@ -4,6 +4,7 @@ import Message from '@/components/Message'
 import MobileFooter from '@/components/MobileFooter'
 import Navbar from '@/components/Navbar'
 import { AuthContextProvider } from '@/context/AuthContext'
+import { PaymentContextProvider } from '@/context/PaymentContext'
 
 import '@/styles/globals.css'
 
@@ -15,7 +16,7 @@ export default function App({ Component, pageProps }) {
   
   return (
     <>
-    
+    <PaymentContextProvider>
     <AuthContextProvider>
     <Navbar/>
    
@@ -23,6 +24,7 @@ export default function App({ Component, pageProps }) {
     <Footer />
     <MobileFooter />
     </AuthContextProvider>
+    </PaymentContextProvider>
   </>
   )
 }

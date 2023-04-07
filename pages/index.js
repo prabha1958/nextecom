@@ -15,13 +15,16 @@ import Search from "@/components/Search";
 import Link from "next/link";
 import { client } from "../lib/client";
 
+
+
 export default function Home({products,mobiles, menclothes, womenclothes, sarees, search}) {
+  
  
   return (
    <div className="w-full py-4"> 
 
    <Head />
-    <div className="max-w-7xl mx-auto mb-28 ">
+    <div className="max-w-7xl mx-auto mb-28 px-3 ">
     <div className="w-full flex items-center justify-between my-5 px-7 py-1 bg-gray-200">
         <p className="text-sm font-bold text-themed4">Computers</p>
         <Link href="/allcomputers"><p className="text-sm font-bold text-themed4">See all computers</p></Link>

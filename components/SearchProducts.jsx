@@ -1,4 +1,4 @@
-import { Link } from "@material-ui/core";
+
 import Image from "next/image";
 import imageUrlBuilder from "@sanity/image-url";
 import { client } from "@/lib/client";

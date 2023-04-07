@@ -1,12 +1,14 @@
+import { PhotoUrl } from '@/Photourl'
 import Link from 'next/link'
 import React from 'react'
 
 export default function MobileMenu({handleClose}) {
+    const {photourl} = PhotoUrl()
   return (
     <div className='fixed  top-0 left-0 bottom-0 right-0 bg-themed3 flex items-center justify-center'>
            <div className='flex flex-col items-center px-2 space-y-2'>
            
-              <Link href="/"><img onClick={handleClose} src={"http://localhost:3000/logo.png"} className=" w-16 h-12 cursor-pointer  " /></Link> 
+              <Link href="/"><img onClick={handleClose} src={`${photourl}/logo.png`} className=" w-16 h-12 cursor-pointer  " /></Link> 
          
               
                 <p className='text-xl text-themel4 font-bold'>Browse products</p>
