@@ -81,7 +81,7 @@ export default function Navbar() {
               {currentUser && (
                 <>
                    <div onClick={()=>setCartOpen(true)} className="relative block cursor-pointer">
-                     <img src={`${photourl}/cart.png`} className=" w-8 h-6 mx-2" />
+                     <img src="/cart.png" className=" w-8 h-6 mx-2" />
                      {cartitems.length>0 && <p className="absolute p-0.5 rounded-full bg-red-600 text-xs font-bold text-themel4 left-4 -top-2">{cartitems.length}</p>}
                    </div>
                     
@@ -99,7 +99,7 @@ export default function Navbar() {
 
          {menuOpen && (
              <div id="menu" className=" flex flex-col items-center justify-center space-y-4 bg-themed3 min-h-max absolute left-0 top-0 w-full p-10  rounded-b-3xl  text-themel4  text-center ">
-                <Link href="/"><img src={`${photourl}/logo.png`} className="w-1/18 h-9" /></Link>
+                <Link href="/"><img src="/logo.png" className="w-1/18 h-9" /></Link>
                  <Link href="/login"><p className="text-md font-thin text-themel4 cursor-pointer">Login</p></Link>
                 <Link href="/register"><p className="text-md font-thin text-themel4 cursor-pointer">Register</p></Link>
              </div>
