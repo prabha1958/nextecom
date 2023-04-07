@@ -1,5 +1,5 @@
 export  const PhotoUrl = ()=>{
-    const photourl = "http://localhost:3000/" 
+    const photourl = "https://ecomnext-gbay.vercel.app" 
 
     return {photourl}
 }
