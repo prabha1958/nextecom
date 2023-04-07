@@ -65,7 +65,7 @@ export default function Navbar() {
         <div className="max-w-7xl mx-auto px-5 py-2 flex items-center justify-between relative ">
       
          
-         <Link href="/"><img src={`${photourl}/logo.png`} className="w-1/18 h-9 hidden md:block cursor-pointer  " /></Link>
+         <Link href="/"><img src="/logo.png" className="w-1/18 h-9 hidden md:block cursor-pointer  " /></Link>
          <Search />
         
           <div className="hidden md:block">
