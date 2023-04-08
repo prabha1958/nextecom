@@ -69,7 +69,7 @@ export default function Cart({cartitems,cartClose, deleteItem}) {
              </div>
             
          </div>
-         {checkoutOpen && <Checkout handleClose={handleClose} cartitems={cartitems} deleteItem={deleteItem} total={total} cartClose={cartClose}/>}
+         {checkoutOpen && <Checkout handleClose={handleClose} cartitems={cartitems} deleteItem={deleteItem} total={total} />}
     </div>
   )
 }
