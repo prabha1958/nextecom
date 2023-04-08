@@ -51,7 +51,7 @@ export default function Search() {
         <div className=" w-80 md:w-96 ">
           <div className="w-full flex items-center justify-center">
              <input  onKeyDown={()=>handleKey()} onChange={(e)=>setSearchValue(e.target.value)} placeholder="search here for anything"  className=" w-3/4 md:w-full px-3 rounded-l-lg py-2  bg-themel4 text-xs font-bold text-themed4 text-center" />
-               <div onClick={handleSearch}  className=" w-8 h-8 bg-themed1 flex items-center justify-center"><img src={"http://localhost:3000/search.png"}  className=" w-5 h-5 cursor-pointer" /></div>
+               <div onClick={handleSearch}  className=" w-8 h-8 bg-themed1 flex items-center justify-center"><img src={"/search.png"}  className=" w-5 h-5 cursor-pointer" /></div>
           
           </div>
            
