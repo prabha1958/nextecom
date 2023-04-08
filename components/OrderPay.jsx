@@ -6,7 +6,7 @@ import { db } from "../firebase/config";
 import { useRouter } from "next/router";
 import Ordersuccess from "./Ordersuccess";
 
-export default function OrderPay({data, setModalOpen, cartClose}) {
+export default function OrderPay({data, setModalOpen}) {
     const [paymentDetails,setPaymentDetails] = useState()
     const [isLoading, setIsLoading] = useState(false)
     const {currentUser} = useAuthContext()
