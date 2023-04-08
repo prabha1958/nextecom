@@ -11,7 +11,7 @@ import axios from "axios";
 import OrderPay from "./OrderPay";
 
 
-export default function Checkout({handleClose, cartitems, deleteItem, total, cartClose}) {
+export default function Checkout({handleClose, cartitems, deleteItem, total}) {
     const {currentUser, setNotification} = useAuthContext()
     const [address,setAddress] = useState([])
     const [defaultAddress,setDefaultAddress] = useState()
@@ -140,7 +140,7 @@ export default function Checkout({handleClose, cartitems, deleteItem, total, car
         </div>
     </div>
        {open && <MoreAddress  setOpen={setOpen}/>}
-       {modalOpen && <OrderPay data={response} setModalOpen={setModalOpen} cartClose={cartClose}/>}
+       {modalOpen && <OrderPay data={response} setModalOpen={setModalOpen} />}
     </>
   )
 }
