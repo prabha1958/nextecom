@@ -9,7 +9,7 @@ import { collection,query,where, onSnapshot,doc, setDoc,getDocs,deleteDoc  } fro
 import {  db } from "../firebase/config";
 import Cart from "./Cart";
 import Message from "./Message";
-import { PhotoUrl } from "@/Photourl";
+
 
 
 
@@ -18,7 +18,7 @@ export default function Navbar() {
     const {currentUser, logout, notification} = useAuthContext()
     const [cartitems,setCartitems] = useState([])
     const [cartOpen,setCartOpen] = useState(false)
-    const {photourl} = PhotoUrl()
+    
 
 
  
