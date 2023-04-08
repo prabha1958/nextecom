@@ -17,7 +17,6 @@ export default function Checkout({handleClose, cartitems, deleteItem, total}) {
     const [defaultAddress,setDefaultAddress] = useState()
     const [selAddress,setSelAddress] = useState(defaultAddress)
     const [open,setOpen] = useState(false)
-    const {photourl} = PhotoUrl()
     const [response,setResponse] = useState()
     const [modalOpen,setModalOpen] = useState(false)
   
