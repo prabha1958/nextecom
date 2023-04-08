@@ -30,6 +30,7 @@ export default function CartItem({cartitems, sno, deleteItem}) {
                                 width={40}
                                 height={60}
                                 className=" w-8 h-10 object-cover"
+                                alt="product name" 
                                 />
                             ))}  
           <p className="text-sm font-bold text-themed3">{cartitems.pname}</p>     
